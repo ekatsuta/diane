@@ -15,8 +15,22 @@ Base.metadata.create_all(bind=engine)
 
 
 def get_db():
+    """Basic database session without transaction management"""
     db = SessionLocal()
     try:
         yield db
+    finally:
+        db.close()
+
+
+def get_db_transactional():
+    """Database session with automatic commit/rollback"""
+    db = SessionLocal()
+    try:
+        yield db
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
     finally:
         db.close()
