@@ -1,6 +1,6 @@
 # Test Database Setup
 
-This directory contains tests for the Klara backend application.
+This directory contains tests for the Diane backend application.
 
 ## Setup
 

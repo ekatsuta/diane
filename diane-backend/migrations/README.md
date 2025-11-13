@@ -66,7 +66,7 @@ Update the file header with:
 ### 001.sql (2025-10-15) - Initial Schema
 **Alembic Revision:** `57fe7a40e8b6`
 
-- Created base schema for Klara application
+- Created base schema for Diane application
 - Added `users` table with email authentication and first_name field
 - Added `tasks`, `shopping_items`, and `calendar_events` tables
 - Set up CASCADE delete constraints for data integrity

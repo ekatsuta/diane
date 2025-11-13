@@ -1,4 +1,4 @@
--- Klara Backend Database Schema
+-- Diane Backend Database Schema
 -- Migration 002: Add subtask model and completion tracking
 -- Date: 2025-10-16
 -- Alembic Revision: 3aab0895a699
