@@ -1,4 +1,4 @@
--- Klara Backend Database Schema
+-- Diane Backend Database Schema
 -- Generated from SQLAlchemy models
 -- Last updated: 2025-10-15
 
@@ -61,7 +61,7 @@ CREATE INDEX IF NOT EXISTS idx_shopping_items_user_id ON shopping_items(user_id)
 CREATE INDEX IF NOT EXISTS idx_calendar_events_user_id ON calendar_events(user_id);
 
 -- Comments
-COMMENT ON TABLE users IS 'User accounts for the Klara application';
+COMMENT ON TABLE users IS 'User accounts for the Diane application';
 COMMENT ON TABLE tasks IS 'Tasks extracted from brain dumps';
 COMMENT ON TABLE shopping_items IS 'Shopping list items extracted from brain dumps';
 COMMENT ON TABLE calendar_events IS 'Calendar events extracted from brain dumps';
