@@ -29,17 +29,7 @@ def create_calendar_event(
     session.add(calendar_event)
     session.flush()
 
-    return CalendarEventResponse(
-        id=calendar_event.id,
-        user_id=calendar_event.user_id,
-        description=calendar_event.description,
-        event_date=str(calendar_event.event_date),
-        event_time=str(calendar_event.event_time)
-        if calendar_event.event_time
-        else None,
-        raw_input=calendar_event.raw_input,
-        created_at=calendar_event.created_at,
-    )
+    return CalendarEventResponse.model_validate(calendar_event)
 
 
 def get_calendar_events_by_user(
@@ -62,18 +52,7 @@ def get_calendar_events_by_user(
 
     events = query.all()
 
-    return [
-        CalendarEventResponse(
-            id=event.id,
-            user_id=event.user_id,
-            description=event.description,
-            event_date=str(event.event_date),
-            event_time=str(event.event_time) if event.event_time else None,
-            raw_input=event.raw_input,
-            created_at=event.created_at,
-        )
-        for event in events
-    ]
+    return [CalendarEventResponse.model_validate(event) for event in events]
 
 
 def update_calendar_event(
@@ -107,15 +86,7 @@ def update_calendar_event(
 
     session.flush()
 
-    return CalendarEventResponse(
-        id=event.id,
-        user_id=event.user_id,
-        description=event.description,
-        event_date=str(event.event_date),
-        event_time=str(event.event_time) if event.event_time else None,
-        raw_input=event.raw_input,
-        created_at=event.created_at,
-    )
+    return CalendarEventResponse.model_validate(event)
 
 
 def delete_calendar_event(session: Session, event_id: int) -> bool:

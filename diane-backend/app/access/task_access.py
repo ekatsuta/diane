@@ -29,17 +29,7 @@ def create_task(
     session.add(task)
     session.flush()
 
-    return TaskResponse(
-        id=task.id,
-        user_id=task.user_id,
-        description=task.description,
-        due_date=str(task.due_date) if task.due_date else None,
-        estimated_time_minutes=task.estimated_time_minutes,
-        completed=task.completed,
-        raw_input=task.raw_input,
-        subtasks=None,
-        created_at=task.created_at,
-    )
+    return TaskResponse.model_validate(task)
 
 
 def create_subtasks(
@@ -62,48 +52,12 @@ def create_subtasks(
     session.add_all(subtask_objects)
     session.flush()
 
-    # Convert to response models
-    # TODO: use pydantic's model_validate
-    return [
-        SubTaskResponse(
-            id=subtask.id,
-            parent_task_id=subtask.parent_task_id,
-            description=subtask.description,
-            order=subtask.order,
-            estimated_time_minutes=subtask.estimated_time_minutes,
-            due_date=str(subtask.due_date) if subtask.due_date else None,
-            completed=subtask.completed,
-            created_at=subtask.created_at,
-        )
-        for subtask in subtask_objects
-    ]
+    return [SubTaskResponse.model_validate(subtask) for subtask in subtask_objects]
 
 
 def _task_to_response(task: Task) -> TaskResponse:
     """Helper function to convert Task ORM model to TaskResponse"""
-    return TaskResponse(
-        id=task.id,
-        user_id=task.user_id,
-        description=task.description,
-        due_date=str(task.due_date) if task.due_date else None,
-        estimated_time_minutes=task.estimated_time_minutes,
-        completed=task.completed,
-        raw_input=task.raw_input,
-        subtasks=[
-            SubTaskResponse(
-                id=st.id,
-                parent_task_id=st.parent_task_id,
-                description=st.description,
-                order=st.order,
-                estimated_time_minutes=st.estimated_time_minutes,
-                due_date=str(st.due_date) if st.due_date else None,
-                completed=st.completed,
-                created_at=st.created_at,
-            )
-            for st in task.subtasks
-        ],
-        created_at=task.created_at,
-    )
+    return TaskResponse.model_validate(task)
 
 
 def get_tasks_by_user(
@@ -197,16 +151,7 @@ def update_subtask(
 
     session.flush()
 
-    return SubTaskResponse(
-        id=subtask.id,
-        parent_task_id=subtask.parent_task_id,
-        description=subtask.description,
-        order=subtask.order,
-        estimated_time_minutes=subtask.estimated_time_minutes,
-        due_date=str(subtask.due_date) if subtask.due_date else None,
-        completed=subtask.completed,
-        created_at=subtask.created_at,
-    )
+    return SubTaskResponse.model_validate(subtask)
 
 
 def delete_subtask(session: Session, subtask_id: int) -> bool:

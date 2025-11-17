@@ -18,14 +18,7 @@ def create_shopping_item(
     session.add(shopping_item)
     session.flush()
 
-    return ShoppingItemResponse(
-        id=shopping_item.id,
-        user_id=shopping_item.user_id,
-        description=shopping_item.description,
-        completed=shopping_item.completed,
-        raw_input=shopping_item.raw_input,
-        created_at=shopping_item.created_at,
-    )
+    return ShoppingItemResponse.model_validate(shopping_item)
 
 
 def get_shopping_items_by_user(
@@ -40,17 +33,7 @@ def get_shopping_items_by_user(
 
     items = query.all()
 
-    return [
-        ShoppingItemResponse(
-            id=item.id,
-            user_id=item.user_id,
-            description=item.description,
-            completed=item.completed,
-            raw_input=item.raw_input,
-            created_at=item.created_at,
-        )
-        for item in items
-    ]
+    return [ShoppingItemResponse.model_validate(item) for item in items]
 
 
 def update_shopping_item(
@@ -69,14 +52,7 @@ def update_shopping_item(
 
     session.flush()
 
-    return ShoppingItemResponse(
-        id=item.id,
-        user_id=item.user_id,
-        description=item.description,
-        completed=item.completed,
-        raw_input=item.raw_input,
-        created_at=item.created_at,
-    )
+    return ShoppingItemResponse.model_validate(item)
 
 
 def delete_shopping_item(session: Session, item_id: int) -> bool:

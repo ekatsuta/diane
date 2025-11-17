@@ -10,8 +10,10 @@ if not DATABASE_URL:
 engine = create_engine(DATABASE_URL, echo=False)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Tables are created when this module is imported
-Base.metadata.create_all(bind=engine)
+
+def init_db():
+    """Create all database tables. Call this on app startup."""
+    Base.metadata.create_all(bind=engine)
 
 
 def get_db():

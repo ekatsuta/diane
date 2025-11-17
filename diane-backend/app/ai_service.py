@@ -17,9 +17,9 @@ class AIService:
         if not self.anthropic_api_key:
             raise ValueError("ANTHROPIC_API_KEY not found in environment variables")
 
-        # Initialize ChatAnthropic model
+        # Initialize ChatAnthropic model with Haiku for cost efficiency
         self.llm = ChatAnthropic(
-            model="claude-sonnet-4-20250514",
+            model="claude-3-5-haiku-20241022",
             anthropic_api_key=self.anthropic_api_key,
             temperature=0.3,
             max_tokens=2048,
