@@ -5,6 +5,7 @@ Pydantic models for API requests, responses, and AI processing
 # Request models
 from app.models.requests import (
     UserLoginRequest,
+    UserSignupRequest,
     BrainDumpRequest,
     TaskUpdateRequest,
     SubTaskUpdateRequest,
@@ -34,6 +35,7 @@ from app.models.ai import (
 __all__ = [
     # Requests
     "UserLoginRequest",
+    "UserSignupRequest",
     "BrainDumpRequest",
     "TaskUpdateRequest",
     "SubTaskUpdateRequest",

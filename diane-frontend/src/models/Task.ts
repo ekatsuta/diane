@@ -41,7 +41,7 @@ export class Task {
     this.estimatedTimeMinutes = data.estimated_time_minutes;
     this.completed = data.completed;
     this.rawInput = data.raw_input;
-    this.subtasks = data.subtasks?.map(st => new SubTask(st)) ?? [];
+    this.subtasks = data.subtasks?.map((st) => new SubTask(st)) ?? [];
     this.createdAt = new Date(data.created_at);
   }
 }
