@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'sonner';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import HomePage from './pages/HomePage';
@@ -12,6 +13,18 @@ import './App.css';
 function App() {
   return (
     <BrowserRouter>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: '#FFFBF5',
+            border: '2px solid #D4C5B9',
+            color: '#3D3D3D',
+            fontFamily: 'inherit',
+          },
+          className: 'toast-custom',
+        }}
+      />
       <Routes>
         {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
