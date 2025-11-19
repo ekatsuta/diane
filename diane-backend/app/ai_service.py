@@ -19,7 +19,7 @@ class AIService:
 
         # Initialize ChatAnthropic model
         self.llm = ChatAnthropic(
-            model="claude-sonnet-4-20250514",
+            model="claude-3-5-haiku-20241022",
             anthropic_api_key=self.anthropic_api_key,
             temperature=0.3,
             max_tokens=2048,

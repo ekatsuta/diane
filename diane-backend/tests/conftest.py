@@ -3,13 +3,15 @@ Pytest configuration and fixtures for testing
 """
 
 import pytest
+from contextlib import asynccontextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from app.main import app
 from app.db_models import Base, User
-from app.database import get_db
+from app.database import get_db, get_db_transactional
 
 
 # Use SQLite for testing - creates automatically, no setup needed
@@ -55,13 +57,35 @@ def test_db_session(test_db_engine):
 def client(test_db_session):
     """Create a test client with overridden database dependency"""
 
+    # Create a no-op lifespan for testing (doesn't connect to production DB)
+    @asynccontextmanager
+    async def test_lifespan(app: FastAPI):
+        # Don't call init_db() - test database is set up by test_db_engine fixture
+        yield
+        # No cleanup needed
+
     def override_get_db():
         try:
             yield test_db_session
         finally:
             pass
 
+    def override_get_db_transactional():
+        try:
+            yield test_db_session
+            test_db_session.commit()
+        except Exception:
+            test_db_session.rollback()
+            raise
+        finally:
+            pass
+
+    # Override database dependencies
     app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_db_transactional] = override_get_db_transactional
+
+    # Override lifespan context
+    app.router.lifespan_context = test_lifespan
 
     with TestClient(app) as test_client:
         yield test_client
