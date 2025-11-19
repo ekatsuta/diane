@@ -163,4 +163,24 @@
     font-weight: 400;
     line-height: 1.6;
   }
+
+  /* Toast notification customization */
+  [data-sonner-toast][data-type='success'] {
+    --normal-bg: #fffbf5;
+    --normal-border: #d4c5b9;
+    --normal-text: #3d3d3d;
+  }
+
+  [data-sonner-toast][data-type='success'] [data-icon] {
+    color: var(--terracotta);
+  }
+
+  [data-sonner-toast] [data-description] {
+    color: var(--charcoal-light);
+  }
+
+  [data-sonner-toast] [data-title],
+  [data-sonner-toast] [data-description] {
+    text-align: center;
+  }
 }

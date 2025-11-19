@@ -1,10 +1,13 @@
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
+import { UserHeader } from '@/components/UserHeader';
+import { Home, CheckSquare, Calendar, ShoppingCart } from 'lucide-react';
 
 const MainLayout = () => {
   const user = useUserStore((state) => state.user);
   const clearUser = useUserStore((state) => state.clearUser);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     clearUser();
@@ -12,56 +15,44 @@ const MainLayout = () => {
   };
 
   const navLinks = [
-    { to: '/', label: 'Home' },
-    { to: '/tasks', label: 'Tasks' },
-    { to: '/shopping', label: 'Shopping' },
-    { to: '/calendar', label: 'Calendar' },
+    { to: '/', label: 'Home', icon: Home },
+    { to: '/tasks', label: 'Tasks', icon: CheckSquare },
+    { to: '/shopping', label: 'Shopping', icon: ShoppingCart },
+    { to: '/calendar', label: 'Calendar', icon: Calendar },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-gray-900">diane</h1>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">{user?.first_name || user?.email}</span>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                Log out
-              </button>
-            </div>
-          </div>
+    <div className="min-h-screen bg-paper-cream relative pb-20">
+      <UserHeader userName={user?.first_name || user?.email || ''} onLogout={handleLogout} />
 
-          {/* Navigation Tabs */}
-          <nav className="flex space-x-8 border-t border-gray-200">
-            {navLinks.map((link) => (
+      {/* Main Content */}
+      <main className="px-6 pt-24 pb-8">
+        <Outlet />
+      </main>
+
+      {/* Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-paper-white/95 backdrop-blur-sm border-t-2 border-line-warm">
+        <div className="max-w-4xl mx-auto flex items-center justify-around py-4">
+          {navLinks.map((link) => {
+            const Icon = link.icon;
+            const isActive =
+              link.to === '/' ? location.pathname === '/' : location.pathname.startsWith(link.to);
+
+            return (
               <NavLink
                 key={link.to}
                 to={link.to}
-                end={link.to === '/'}
-                className={({ isActive }) =>
-                  `py-4 px-1 border-b-2 font-medium text-sm ${
-                    isActive
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`
-                }
+                className={`flex flex-col items-center gap-1 p-2 transition-colors ${
+                  isActive ? 'text-terracotta' : 'text-charcoal-light hover:text-terracotta'
+                }`}
               >
-                {link.label}
+                <Icon className="w-5 h-5" strokeWidth={isActive ? 2 : 1.5} />
+                <span className="text-xs">{link.label}</span>
               </NavLink>
-            ))}
-          </nav>
+            );
+          })}
         </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Outlet />
-      </main>
+      </nav>
     </div>
   );
 };
