@@ -16,7 +16,9 @@ async def login(request: UserLoginRequest, db: Session = Depends(get_db_transact
 
 
 @router.post("/signup", response_model=UserResponse)
-async def signup(request: UserSignupRequest, db: Session = Depends(get_db_transactional)):
+async def signup(
+    request: UserSignupRequest, db: Session = Depends(get_db_transactional)
+):
     """Create new user with email and first name"""
     user = user_access.get_or_create_user(
         session=db, email=request.email, first_name=request.first_name

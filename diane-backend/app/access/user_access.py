@@ -7,7 +7,9 @@ from app.db_models import User
 from app.models import UserResponse
 
 
-def get_or_create_user(session: Session, email: str, first_name: str | None = None) -> UserResponse:
+def get_or_create_user(
+    session: Session, email: str, first_name: str | None = None
+) -> UserResponse:
     """Get existing user or create new one by email"""
     # Check if user exists
     user = session.query(User).filter(User.email == email).first()

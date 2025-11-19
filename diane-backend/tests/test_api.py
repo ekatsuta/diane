@@ -159,6 +159,20 @@ def test_update_task(client, test_user, sample_task):
     assert updated_task["description"] == "Complete onboarding - Updated"
 
 
+def test_update_task_with_date(client, test_user, sample_task):
+    """Test updating a task with date string - Pydantic should convert it"""
+    # Update the task with a date string
+    response = client.put(
+        f"/tasks/{sample_task.id}",
+        json={"due_date": "2026-01-15", "estimated_time_minutes": 180},
+    )
+
+    assert response.status_code == 200
+    updated_task = response.json()
+    assert updated_task["due_date"] == "2026-01-15"
+    assert updated_task["estimated_time_minutes"] == 180
+
+
 def test_update_task_not_found(client):
     """Test updating a non-existent task"""
     response = client.put(
@@ -200,6 +214,23 @@ def test_update_subtask(client, test_user, sample_task_with_subtasks):
 
     assert response.status_code == 200
     assert response.json()["completed"] is True
+
+
+def test_update_subtask_with_date(client, test_user, sample_task_with_subtasks):
+    """Test updating a subtask with date string - Pydantic should convert it"""
+    task_id = sample_task_with_subtasks.id
+    subtask_id = sample_task_with_subtasks.subtasks[0].id
+
+    # Update subtask with date
+    response = client.put(
+        f"/tasks/{task_id}/subtasks/{subtask_id}",
+        json={"due_date": "2026-02-20", "estimated_time_minutes": 60},
+    )
+
+    assert response.status_code == 200
+    updated_subtask = response.json()
+    assert updated_subtask["due_date"] == "2026-02-20"
+    assert updated_subtask["estimated_time_minutes"] == 60
 
 
 def test_delete_subtask(client, test_user, sample_task_with_subtasks):
@@ -335,6 +366,25 @@ def test_update_calendar_event(client, test_user, sample_calendar_event):
     assert response.status_code == 200
     updated_event = response.json()
     assert "Cancelled" in updated_event["description"]
+
+
+def test_update_calendar_event_with_time(client, test_user, sample_calendar_event):
+    """Test updating a calendar event with date and time strings - Pydantic should convert them"""
+    # Update the event with both date and time
+    response = client.put(
+        f"/calendar-events/{sample_calendar_event.id}",
+        json={
+            "event_date": "2026-03-10",
+            "event_time": "15:30",
+            "description": "Dentist appointment",
+        },
+    )
+
+    assert response.status_code == 200
+    updated_event = response.json()
+    assert updated_event["event_date"] == "2026-03-10"
+    assert updated_event["event_time"] == "15:30:00"
+    assert updated_event["description"] == "Dentist appointment"
 
 
 def test_update_calendar_event_not_found(client):

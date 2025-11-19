@@ -3,7 +3,7 @@ Task database access functions
 """
 
 from typing import Optional, List, Dict, Any
-from datetime import date, datetime
+from datetime import date
 from sqlalchemy.orm import Session
 from sqlalchemy import asc, desc
 from app.db_models import Task, SubTask
@@ -102,12 +102,6 @@ def update_task(
     if not task:
         return None
 
-    # Handle date conversion if due_date is in update_data
-    if "due_date" in update_data and update_data["due_date"]:
-        update_data["due_date"] = datetime.strptime(
-            update_data["due_date"], "%Y-%m-%d"
-        ).date()
-
     # Update only the fields that were provided
     for field, value in update_data.items():
         if hasattr(task, field):
@@ -137,12 +131,6 @@ def update_subtask(
 
     if not subtask:
         return None
-
-    # Handle date conversion if due_date is in update_data
-    if "due_date" in update_data and update_data["due_date"]:
-        update_data["due_date"] = datetime.strptime(
-            update_data["due_date"], "%Y-%m-%d"
-        ).date()
 
     # Update only the fields that were provided
     for field, value in update_data.items():

@@ -3,7 +3,7 @@ Calendar event database access functions
 """
 
 from typing import Optional, List, Dict, Any
-from datetime import date, time, datetime
+from datetime import date, time
 from sqlalchemy.orm import Session
 from sqlalchemy import asc
 from app.db_models import CalendarEvent
@@ -63,21 +63,6 @@ def update_calendar_event(
 
     if not event:
         return None
-
-    # Handle date conversion if event_date is in update_data
-    if "event_date" in update_data and update_data["event_date"]:
-        update_data["event_date"] = datetime.strptime(
-            update_data["event_date"], "%Y-%m-%d"
-        ).date()
-
-    # Handle time conversion if event_time is in update_data
-    if "event_time" in update_data and update_data["event_time"]:
-        time_format = (
-            "%H:%M:%S" if update_data["event_time"].count(":") == 2 else "%H:%M"
-        )
-        update_data["event_time"] = datetime.strptime(
-            update_data["event_time"], time_format
-        ).time()
 
     # Update only the fields that were provided
     for field, value in update_data.items():
